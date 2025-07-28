@@ -18,6 +18,13 @@ def parse_args():
     
     return args
 
+
+def main(img_dir, output_file, boxes):
+    cleaner = BBoxCleaner(img_dir, output_file)
+    cleaner.load_numpy_array(boxes)
+    cleaner.run()
+    
+
 class BBoxCleaner:
     def __init__(self, images_dir: str, output_file: str):
         self.images_dir = images_dir
@@ -711,10 +718,8 @@ if __name__ == "__main__":
     
     filename_parts = os.path.splitext(os.path.basename(boxes_path))
     output_file = filename_parts[0] + "_cleaned" + filename_parts[1]
-    output_file = os.path.join(output_path, output_file)    
+    output_file = os.path.join(output_path, output_file)
     
-    cleaner = BBoxCleaner(img_dir, output_file)
     boxes = np.load(boxes_path, allow_pickle=True).tolist()
-    cleaner.load_numpy_array(boxes)
-
-    cleaner.run()
+    
+    main(img_dir, output_file, boxes) 

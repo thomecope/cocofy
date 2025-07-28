@@ -2,7 +2,7 @@
 
 use this to build image detection dataset
 
-## 🧨 how-to
+## 🧨 how it works
 
 ### 1. generate initial boxes
 
@@ -16,7 +16,12 @@ use `cleaner.py` to take away bad boxes
 
 use `dataset_creator.py` to export annotations to `json`
 
+### 4. use annotations to fine tune a model!
+
 ## ℹ️ more info
+
+### `main.py`
+this runs both functions end-to-end
 
 ### `cleaner.py`
 

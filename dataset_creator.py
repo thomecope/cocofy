@@ -16,6 +16,23 @@ def parse_args():
     return args
 
 
+def main(img_dir, output_file, boxes):
+    img_paths = [os.path.join(img_dir, f) for f in sorted(os.listdir(img_dir))]
+    raw_data = zip(img_paths, boxes)
+    
+    custom_info = {
+        "description": "Swimmer Dataset v1",
+        "version": "1.0",
+        "contributor": "tommy",
+        "url": "https://test.com/test"
+    }
+    dataset = create_coco_dataset(raw_data, "swimmer", custom_info)
+
+    # save to file
+    with open(output_file, "w") as f:
+        json.dump(dataset, f, indent=2)
+
+
 def create_coco_dataset(images_data, class_name="object", dataset_info=None):
     """
     Create COCO dataset from simple image data.
@@ -116,24 +133,11 @@ if __name__ == "__main__":
     img_dir = args.dir
     boxes_path = args.boxes
     output_path = args.out_dir if args.out_dir is not None else os.path.dirname(boxes_path)
-        
-    img_paths = [os.path.join(img_dir, f) for f in sorted(os.listdir(img_dir))]
-    boxes = np.load(boxes_path, allow_pickle=True).tolist()
-    
+       
     filename_parts = os.path.splitext(os.path.basename(boxes_path))
     output_file = filename_parts[0] + "_coco.json"
-    output_file = os.path.join(output_path, output_file) 
+    output_file = os.path.join(output_path, output_file)  
     
-    raw_data = zip(img_paths, boxes)
-
-    custom_info = {
-        "description": "Swimmer Dataset v1",
-        "version": "1.0",
-        "contributor": "tommy",
-        "url": "https://test.com/test"
-    }
-    dataset = create_coco_dataset(raw_data, "swimmer", custom_info)
-
-    # save to file
-    with open(output_file, "w") as f:
-        json.dump(dataset, f, indent=2)
+    boxes = np.load(boxes_path, allow_pickle=True).tolist()
+    
+    main(img_dir, output_file, boxes)
